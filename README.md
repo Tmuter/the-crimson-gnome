@@ -33,31 +33,34 @@ It is **not** an assertion-based snapshot suite. Playwright/Percy fail CI when p
 
 ## Install
 
+**As a Claude Code skill (recommended).** Clone it into a skills directory — it then auto-triggers when you ask for a "before/after report", no command needed:
+
 ```bash
-npm i -D the-crimson-gnome      # pixelmatch + pngjs come along as runtime deps
-# or clone the repo and `npm install`
+git clone https://github.com/Tmuter/the-crimson-gnome ~/.claude/skills/the-crimson-gnome
+cd ~/.claude/skills/the-crimson-gnome && npm install   # pixelmatch + pngjs, for the diff step
 ```
+
+Use a project's `.claude/skills/` instead of `~/.claude/skills/` to scope it to one repo.
+
+**Standalone / as a dependency.** `npm i the-crimson-gnome` then `npx crimson-gnome <manifest>`, or clone anywhere and run the scripts directly.
 
 ---
 
 ## Quickstart — see it work in 30 seconds (no app, no Chrome, no login)
 
-The diff + report half is fully standalone. Using the bundled fixtures:
+The diff + report half is fully standalone — run it from the cloned repo:
 
 ```bash
 # 1. pixel-diff two screenshots → a diff PNG + JSON verdict
-node node_modules/the-crimson-gnome/diff-images.mjs \
-  node_modules/the-crimson-gnome/examples/before.png \
-  node_modules/the-crimson-gnome/examples/after.png /tmp/diff.png
+node diff-images.mjs examples/before.png examples/after.png /tmp/diff.png
 
 # 2. build a report from the example manifest
-node node_modules/the-crimson-gnome/build-report.mjs \
-  node_modules/the-crimson-gnome/examples/sample.json /tmp/report.html
+node build-report.mjs examples/sample.json /tmp/report.html
 
 open /tmp/report.html   # macOS · use xdg-open on Linux
 ```
 
-(From a clone, drop the `node_modules/the-crimson-gnome/` prefix.)
+(Installed as an npm dep instead? Prefix the script paths with `node_modules/the-crimson-gnome/`.)
 
 ---
 
@@ -66,16 +69,16 @@ open /tmp/report.html   # macOS · use xdg-open on Linux
 ```bash
 # 1. Launch the dedicated capture browser (once per machine). Log in in the
 #    window that opens — the session persists in the profile across runs.
-bash node_modules/the-crimson-gnome/cdp-launch.sh
+bash cdp-launch.sh
 
 # 2. Write a manifest (see below), then run the one-command pipeline:
-npx crimson-gnome my-review.json        # capture → diff → suggest → report
+node verify-ui.mjs my-review.json        # capture → diff → suggest → report
 #   └─ writes my-review.html next to the manifest
 
 # 3. Open my-review.html and review.
 ```
 
-`crimson-gnome` (a.k.a. `verify-ui.mjs`) captures every row's before/after in parallel, pixel-diffs each pair, auto-passes the unchanged ones, tries to point at the changed element, and renders the report.
+`verify-ui.mjs` (also exposed as the `crimson-gnome` bin) captures every row's before/after in parallel, pixel-diffs each pair, auto-passes the unchanged ones, tries to point at the changed element, and renders the report.
 
 ---
 
@@ -153,12 +156,6 @@ The report is English out of the box. Override any string via `manifest.strings`
 ```json
 { "lang": "de", "strings": { "checked": "Geprüft", "exportJson": "JSON exportieren", "copied": "Kopiert ✓" } }
 ```
-
----
-
-## Use as an AI-agent skill
-
-`SKILL.md` is an agent-facing description (e.g. for Claude Code). Drop the package where your agent can read it and it can drive the pipeline directly.
 
 ---
 

@@ -1,5 +1,9 @@
 # nitpicker
 
+[![CI](https://github.com/Tmuter/nitpicker/actions/workflows/ci.yml/badge.svg)](https://github.com/Tmuter/nitpicker/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![node](https://img.shields.io/badge/node-%E2%89%A522.4-brightgreen.svg)](https://nodejs.org)
+
 > **Before/after screenshot diffing for humans.** Capture two states of a page, pixel-diff them, and get a single self-contained HTML report you walk to sign off each change.
 
 ![nitpicker before/after review report — title, toolbar, a changed-row with before/after slider and a Before/After/Diff strip](https://raw.githubusercontent.com/Tmuter/nitpicker/main/examples/demo.png)

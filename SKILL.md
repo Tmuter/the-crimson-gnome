@@ -50,6 +50,7 @@ One row per **user-perceived** change (not per file). `verify-ui.mjs` fills the 
 - `before` / `after` — output PNG paths (under `.ui-diff/`), inlined as base64 so the `.html` is portable.
 - `diff` / `diffStats` / `suggestedSelector` — **filled by `verify-ui.mjs`**; don't hand-author.
 - `sel` / `clicktext` / `outline` / `outlinetext` / `hide` — capture options (same semantics as the one-off `cdp-shot.mjs`).
+- `frame` — **default on**: the element under review (`sel`) gets a **red frame** drawn around it on both shots, so the report visibly points at what changed. Drawn just outside the element (never covers content) and sits inside the `sel` clip's 8px margin, so it stays visible even on a clipped shot — and is identical on before+after, so it's never itself flagged as a diff. Set `frame: false` on a row, or `capture.frame: false` globally, to disable. An explicit `outline`/`outlinetext` takes precedence.
 - `seed` / `themeKeys` / `hideDevOverlays` — capture config: `seed` is a `{key:value}` map written to `localStorage` before navigation (e.g. dismiss a cookie banner the app gates content behind); `themeKeys` overrides which `localStorage` keys receive `theme`; `hideDevOverlays` (default true) hides framework dev overlays.
 - `note` — read-only ℹ️ context line YOU show the user (a caveat: needs a logged-in session, a locale you couldn't verify). It is NOT the user's input field — their input goes in the separate "My notes" textarea.
 
@@ -98,7 +99,7 @@ Capture uses a **dedicated debugging browser** — background-safe (works while 
 For a single ad-hoc shot (not a full before/after batch):
 
 ```
-node <path>/before-after-ui-diff/cdp-shot.mjs <url> <out.png> [--full|--viewport --w= --h= --scale= --wait= --theme= --seed=k=v --clicktext= --sel= --outline= --outlinetext=]
+node <path>/before-after-ui-diff/cdp-shot.mjs <url> <out.png> [--full|--viewport --w= --h= --scale= --wait= --theme= --seed=k=v --clicktext= --sel= --outline= --outlinetext= --frame]
 ```
 
 It captures the page itself (no browser chrome → no cropping), full-page by default. For before/after verification use the batch path (`verify-ui.mjs`) — it's faster and produces the diff.

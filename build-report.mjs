@@ -74,6 +74,7 @@ const STRINGS = {
   diffPrefix: 'diff: ',
   missing: '— no screenshot',
   likelyChanged: 'likely changed:',
+  frameLegend: 'Red frame = the element under review on each screenshot.',
   myNotes: 'My notes',
   myNotesPlaceholder: 'What to fix / a note on this change — joins at the bottom',
   combinedTitle: 'All notes',
@@ -179,6 +180,12 @@ const ROWS = rows.map((r, i) => ({
 }));
 
 const reportTitle = manifest.title || S.reportTitle;
+// Legend appears only when at least one row is actually framed — mirrors the
+// auto-frame rule in cdp-batch.mjs (on when a row clips to `sel` and framing isn't
+// disabled; an explicit outline/outlinetext always frames).
+const framesPresent = (manifest.rows || []).some((r) =>
+  r.outline || r.outlinetext ||
+  (r.frame !== false && manifest.capture?.frame !== false && !!r.sel));
 
 const html = `<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -190,6 +197,8 @@ body{font:15px/1.5 system-ui,-apple-system,sans-serif;margin:0 auto;padding:24px
 @media(prefers-color-scheme:dark){body{background:#0c0a09;color:#e7e5e4}}
 h1{font-size:22px;margin:0 0 4px} h2{font-size:16px;margin:0}
 .sub{opacity:.7;font-size:13px;margin:0 0 16px}
+.frame-legend{display:flex;align-items:center;gap:7px;margin:-10px 0 16px;font-size:13px;opacity:.8}
+.frame-chip{display:inline-block;width:13px;height:13px;border:2px solid #f43f5e;border-radius:3px;flex:none}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .toolbar button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #d6d3d1;background:#fff;color:inherit;border-radius:8px;padding:6px 12px}
 .toolbar button:hover{border-color:#0d9488}
@@ -256,6 +265,7 @@ footer ul{padding-left:18px}
 </style></head><body>
 <h1>${esc(reportTitle)}</h1>
 <p class="sub">${S.intro}</p>
+${framesPresent ? `<p class="frame-legend"><span class="frame-chip" aria-hidden="true"></span>${esc(S.frameLegend)}</p>` : ''}
 <div class="toolbar">
   <button type="button" id="showChanged" data-on="0">${esc(S.showChanged)}</button>
   <button type="button" id="approveVisible">${esc(S.approveVisible)}</button>

@@ -18,6 +18,7 @@
  *   --hide=".foo{visibility:hidden!important}"  extra CSS appended to the deterministic-render prelude
  *   --outline="#sel"             frame matching element(s) with an outline (drawn OUTSIDE the box → no obscuring)
  *   --outlinetext="After how..."  frame the PARENT of the tightest element whose text includes this
+ *   --frame                      draw a red frame around the --sel element (faithful: no border-radius)
  *
  * A shot showing the login screen = the dedicated profile isn't logged in yet —
  * run cdp-launch.sh and log in once in that window.
@@ -26,13 +27,14 @@ import { writeFileSync } from 'node:fs';
 
 const PORT = process.env.CDP_PORT || 9333;
 const [, , url, out, ...rest] = process.argv;
-if (!url || !out) { console.error('Usage: node cdp-shot.mjs <url> <out.png> [--w= --h= --scale= --wait= --full|--viewport --theme= --themeKeys= --seed=k=v --hideDevOverlays[=false] --clicktext= --sel= --readySel= --hide= --outline= --outlinetext=]'); process.exit(1); }
+if (!url || !out) { console.error('Usage: node cdp-shot.mjs <url> <out.png> [--w= --h= --scale= --wait= --full|--viewport --theme= --themeKeys= --seed=k=v --hideDevOverlays[=false] --clicktext= --sel= --readySel= --hide= --outline= --outlinetext= --frame]'); process.exit(1); }
 const opt = (k, d) => { const a = rest.find((x) => x.startsWith(`--${k}=`)); return a ? a.slice(k.length + 3) : d; };
 const W = +opt('w', 1440), H = +opt('h', 900), SCALE = +opt('scale', 2), WAIT = +opt('wait', 500);
 const FULL = !rest.includes('--viewport');
 const THEME = opt('theme', null), CLICKTEXT = opt('clicktext', null), SEL = opt('sel', null);
 const READYSEL = opt('readySel', null), HIDE = opt('hide', '');
 const OUTLINE = opt('outline', null), OUTLINETEXT = opt('outlinetext', null);
+const FRAME = rest.includes('--frame'); // draw a red frame around the --sel element (faithful: no border-radius)
 // Which localStorage keys get the --theme value. Generic defaults — many apps
 // read one of these; override with --themeKeys for an app-specific key.
 const THEME_KEYS = opt('themeKeys', 'theme,color-theme,ui-theme').split(',').map((s) => s.trim()).filter(Boolean);
@@ -138,6 +140,14 @@ try {
     if (OUTLINE) await evalJs(`(()=>{const f=${HILITE};const els=[...document.querySelectorAll(${JSON.stringify(OUTLINE)})];els.forEach(f);return els.length;})()`);
     if (OUTLINETEXT) await evalJs(`(()=>{const t=${JSON.stringify(OUTLINETEXT)};const f=${HILITE};const c=[...document.querySelectorAll('body *')].filter(e=>e.offsetParent!==null&&e.textContent.includes(t));const el=c.sort((a,b)=>a.textContent.length-b.textContent.length)[0];const tgt=(el&&el.parentElement)||el;if(tgt)f(tgt);return tgt?tgt.tagName:'none';})()`);
     await sleep(300);
+  }
+
+  if (FRAME && SEL) {
+    // Frame the --sel element itself (faithful: no border-radius mutation). Sits in
+    // the +8px sel-clip margin so it stays visible even on a clipped shot.
+    const FRAMECSS = `(s)=>{s.style.setProperty('outline','3px solid #f43f5e','important');s.style.setProperty('outline-offset','4px','important');}`;
+    await evalJs(`(()=>{const f=${FRAMECSS};const e=document.querySelector(${JSON.stringify(SEL)});if(e){f(e);return true;}return false;})()`);
+    await sleep(150);
   }
 
   let clip;

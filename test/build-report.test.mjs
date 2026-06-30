@@ -144,3 +144,35 @@ test('renders slider + diff column + decision + export when a row has diff + dif
   // Export-to-JSON affordance (English label + the control id).
   assert.ok(html.includes('exportJson') && /export json/i.test(html), 'JSON export control present');
 });
+
+test('red-frame legend renders only when a row is actually framed', () => {
+  // NB: the class tokens (.frame-legend/.frame-chip) also live in the <style> block,
+  // so assert on the RENDERED <p class="frame-legend"> element, not the bare token.
+  const LEGEND = '<p class="frame-legend">';
+
+  // Auto-frame default: a row that clips to `sel` → legend + chip + text rendered.
+  const framed = buildReport({ title: 'Framed', id: 'fr-1', rows: [{ id: 'r1', title: 'A', sel: '#save' }] });
+  assert.ok(framed.includes(LEGEND), 'legend rendered when a row has a sel');
+  assert.ok(framed.includes('<span class="frame-chip"'), 'red-frame chip rendered');
+  assert.match(framed, /Red frame = the element under review/, 'legend text rendered');
+
+  // Per-row opt-out (frame:false) suppresses the legend.
+  const optOut = buildReport({ title: 'Opt out', id: 'fr-2', rows: [{ id: 'r1', title: 'A', sel: '#save', frame: false }] });
+  assert.ok(!optOut.includes(LEGEND), 'no legend when the row opts out');
+
+  // Global opt-out via capture.frame:false.
+  const globalOff = buildReport({ title: 'Global off', id: 'fr-3', capture: { frame: false }, rows: [{ id: 'r1', title: 'A', sel: '#save' }] });
+  assert.ok(!globalOff.includes(LEGEND), 'no legend when framing disabled globally');
+
+  // Nothing to frame (no sel, no outline) → no legend.
+  const noFrame = buildReport({ title: 'No frame', id: 'fr-4', rows: [{ id: 'r1', title: 'A' }] });
+  assert.ok(!noFrame.includes(LEGEND), 'no legend when no row is framed');
+
+  // An explicit outline always frames (even without a sel clip).
+  const outlined = buildReport({ title: 'Outlined', id: 'fr-5', rows: [{ id: 'r1', title: 'A', outline: '#hero' }] });
+  assert.ok(outlined.includes(LEGEND), 'legend rendered for an explicit outline');
+
+  // The legend string is localizable via manifest.strings.
+  const localized = buildReport({ title: 'PL', id: 'fr-6', strings: { frameLegend: 'Czerwona ramka = element w przeglądzie.' }, rows: [{ id: 'r1', title: 'A', sel: '#save' }] });
+  assert.match(localized, /Czerwona ramka = element w przeglądzie\./, 'legend text is overridable via manifest.strings');
+});

@@ -249,6 +249,12 @@ async function nav(sessionId, url, wait = 500, readySel) {
 // outline+offset → never covers content). Kept identical to cdp-shot.mjs.
 const HILITE = `(s)=>{s.style.setProperty('outline','3px solid #f43f5e','important');s.style.setProperty('outline-offset','4px','important');s.style.setProperty('border-radius','10px','important');}`;
 
+// Frame the element UNDER REVIEW itself: the same red outline as HILITE but WITHOUT
+// the border-radius mutation, so the reviewed element renders faithfully (only a
+// rectangular red frame is added around it). Drawn 4–7px outside the box via
+// outline-offset → fits inside the +8px `sel` clip and never covers content.
+const FRAME = `(s)=>{s.style.setProperty('outline','3px solid #f43f5e','important');s.style.setProperty('outline-offset','4px','important');}`;
+
 /**
  * Capture a single before/after job into its PNG. Reads all row capture opts
  * (sel, clicktext, outline, outlinetext) plus merged capture overrides.
@@ -272,6 +278,14 @@ async function capture(job) {
       if (job.outline) await evalJs(page.sessionId, `(()=>{const f=${HILITE};const els=[...document.querySelectorAll(${JSON.stringify(job.outline)})];els.forEach(f);return els.length;})()`);
       if (job.outlinetext) await evalJs(page.sessionId, `(()=>{const t=${JSON.stringify(job.outlinetext)};const f=${HILITE};const c=[...document.querySelectorAll('body *')].filter(e=>e.offsetParent!==null&&e.textContent.includes(t));const el=c.sort((a,b)=>a.textContent.length-b.textContent.length)[0];const tgt=(el&&el.parentElement)||el;if(tgt)f(tgt);return tgt?tgt.tagName:'none';})()`);
       await sleep(300);
+    }
+
+    if (job.frame) {
+      // Auto-frame the element under review (its own `sel`) so the report visibly
+      // points at what changed. Same red outline on BOTH before+after with identical
+      // geometry → the frame itself is never flagged as a diff.
+      await evalJs(page.sessionId, `(()=>{const f=${FRAME};const e=document.querySelector(${JSON.stringify(job.frame)});if(e){f(e);return true;}return false;})()`);
+      await sleep(150);
     }
 
     let clip;
@@ -303,6 +317,12 @@ async function capture(job) {
 // each job is self-describing inside the pool.
 const jobs = [];
 for (const row of manifest.rows || []) {
+  // Auto-frame the element under review by default: when the row clips to `sel` and
+  // framing isn't disabled (row.frame===false, or capture.frame===false globally),
+  // draw a red frame around that element on both shots. An explicit outline/
+  // outlinetext wins — the user is deliberately framing another element for context.
+  const frameOn = row.frame !== false && baseCapture.frame !== false;
+  const frameSel = frameOn && row.sel && !row.outline && !row.outlinetext ? row.sel : null;
   for (const kind of ['before', 'after']) {
     if (!row[`${kind}Url`] || !row[kind]) continue;
     jobs.push({
@@ -314,6 +334,7 @@ for (const row of manifest.rows || []) {
       clicktext: row.clicktext,
       outline: row.outline,
       outlinetext: row.outlinetext,
+      frame: frameSel,
       capture: row.capture,
     });
   }

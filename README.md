@@ -118,13 +118,14 @@ One row per **user-perceived** change (not per file). You author `title`/`where`
 | `diff` / `diffStats` / `suggestedSelector` | **filled by the pipeline** — don't hand-author. |
 | `sel` | clip the shot (and diff) to this element's box. **Strongly recommended** — full-page shots make noisy diffs. |
 | `clicktext` / `outline` / `outlinetext` / `hide` | capture helpers (open a disclosure, frame an element, hide a selector). |
+| `frame` | **default on** — draws a red frame around the `sel` element on both shots so the report points at the change. Identical on before+after (never a false diff); set `false` per row, or `capture.frame: false` globally, to disable. |
 | `note` | read-only ℹ️ context line you show the reviewer (a caveat). Not their input field. |
 
 **Tip:** add a stable hook (`data-ui-diff="save-button"`) to the changed component and clip to it (`sel: "[data-ui-diff='save-button']"`). Clipped diffs are far quieter than full-page (layout shifts, sticky headers, and dynamic timestamps all flip pixels).
 
 ### Capture options (`capture` / `row.capture`)
 
-`w` `h` `scale` `wait` `theme` (`light`/`dark`) · `themeKeys` (which `localStorage` keys get the theme; default `["theme","color-theme","ui-theme"]`) · `seed` (`{key:value}` localStorage seeded before nav — e.g. dismiss a cookie banner) · `hideDevOverlays` (default `true`; hides Next.js dev portals/toasts — harmless elsewhere) · `readySel` · `sel` `clicktext` `outline` `outlinetext` `hide`.
+`w` `h` `scale` `wait` `theme` (`light`/`dark`) · `themeKeys` (which `localStorage` keys get the theme; default `["theme","color-theme","ui-theme"]`) · `seed` (`{key:value}` localStorage seeded before nav — e.g. dismiss a cookie banner) · `hideDevOverlays` (default `true`; hides Next.js dev portals/toasts — harmless elsewhere) · `readySel` · `sel` `clicktext` `outline` `outlinetext` `hide` · `frame` (default `true`; red frame around the reviewed `sel` element — set `false` to disable).
 
 ---
 

@@ -133,8 +133,11 @@ const rowsHtml = rows
     // by a range input (--pos). Lets you wipe between states without flipping.
     const sliderHtml = hasSlider
       ? `    <div class="slider" style="--pos:50%">
-      <img src="${beforeUri}" alt="${esc(S.beforePrefix + (r.title || ''))}">
-      <img class="top" src="${afterUri}" alt="${esc(S.afterPrefix + (r.title || ''))}">
+      <img src="${afterUri}" alt="${esc(S.afterPrefix + (r.title || ''))}">
+      <img class="top" src="${beforeUri}" alt="${esc(S.beforePrefix + (r.title || ''))}">
+      <span class="sl-badge sl-before">${esc(S.before)}</span>
+      <span class="sl-badge sl-after">${esc(S.after)}</span>
+      <span class="divider"></span>
       <input type="range" min="0" max="100" value="50" aria-label="${esc(S.sliderAria)}">
     </div>\n`
       : '';
@@ -215,7 +218,11 @@ h1{font-size:22px;margin:0 0 4px} h2{font-size:16px;margin:0}
 @media(prefers-color-scheme:dark){.slider{border-color:#292524}}
 .slider img{display:block;width:100%}
 .slider .top{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
-.slider input{position:absolute;left:12px;right:12px;bottom:10px;width:calc(100% - 24px);cursor:ew-resize}
+.slider .divider{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.slider .divider::after{content:"";position:absolute;top:50%;left:50%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.slider .sl-badge{position:absolute;top:8px;font:600 11px/1 system-ui,sans-serif;color:#fff;background:rgba(0,0,0,.55);padding:3px 7px;border-radius:5px;pointer-events:none}
+.slider .sl-before{left:8px} .slider .sl-after{right:8px}
+.slider input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
 .shots.tri{grid-template-columns:1fr 1fr 1fr}
 @media(max-width:640px){.shots,.shots.tri{grid-template-columns:1fr}}

@@ -7,7 +7,7 @@
  * elements overlap that region. We rank by overlap-fraction (how much of the
  * element sits inside the changed box) then by smallest area, so we land on the
  * tightest element that actually changed rather than a giant wrapper. We prefer
- * stable hooks ([data-nitpick] / id / [data-testid]) over a tag.class guess so
+ * stable hooks ([data-crimson-gnome] / id / [data-testid]) over a tag.class guess so
  * the suggestion can be pasted straight back into a manifest row's `sel`.
  *
  *   node suggest-element.mjs <manifest.json> <rowId>
@@ -118,7 +118,7 @@ try {
   // Ask the DOM which visible elements overlap the changed box. Rank by
   // overlap-fraction (overlap / element area) — a tiny element fully inside the
   // box beats a huge wrapper that the box only nicks — then by smallest area as
-  // a tiebreak. Build a stable selector preferring [data-nitpick] → id →
+  // a tiebreak. Build a stable selector preferring [data-crimson-gnome] → id →
   // [data-testid] → tag.class so the result is paste-ready into a manifest.
   const candidates = await evalJs(`(() => {
     const box = ${JSON.stringify(box)};
@@ -128,7 +128,7 @@ try {
       return ox * oy;
     };
     const sel = (el) => {
-      if (el.dataset && el.dataset.nitpick) return '[data-nitpick="' + CSS.escape(el.dataset.nitpick) + '"]';
+      if (el.dataset && el.dataset.crimson-gnome) return '[data-crimson-gnome="' + CSS.escape(el.dataset.crimson-gnome) + '"]';
       if (el.id) return '#' + CSS.escape(el.id);
       const tid = el.getAttribute('data-testid');
       if (tid) return '[data-testid="' + CSS.escape(tid) + '"]';

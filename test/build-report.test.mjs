@@ -23,7 +23,7 @@ function writePng(dir, name) {
 
 // Build a report from `manifest`, return the generated HTML.
 function buildReport(manifest) {
-  const dir = mkdtempSync(join(tmpdir(), 'nitpick-report-'));
+  const dir = mkdtempSync(join(tmpdir(), 'crimson-gnome-report-'));
   const manifestPath = join(dir, 'task.json');
   const outPath = join(dir, 'task.html');
   writeFileSync(manifestPath, JSON.stringify(manifest));
@@ -32,7 +32,7 @@ function buildReport(manifest) {
 }
 
 test('escapes HTML in titles and notes (no injection from manifest text)', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'nitpick-report-'));
+  const dir = mkdtempSync(join(tmpdir(), 'crimson-gnome-report-'));
   const html = buildReport({
     title: 'T<script>alert(1)</script>',
     id: 'esc-1',
@@ -100,7 +100,7 @@ test('manifest.strings overrides any UI string (locale hook), and lang is honore
 });
 
 test('renders slider + diff column + decision + export when a row has diff + diffStats', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'nitpick-report-'));
+  const dir = mkdtempSync(join(tmpdir(), 'crimson-gnome-report-'));
   const html = buildReport({
     title: 'Diff report',
     id: 'diff-1',
@@ -121,7 +121,7 @@ test('renders slider + diff column + decision + export when a row has diff + dif
           height: 250,
           bbox: { x: 10, y: 20, width: 50, height: 60 },
         },
-        suggestedSelector: "[data-nitpick='save-button']",
+        suggestedSelector: "[data-crimson-gnome='save-button']",
       },
     ],
   });
@@ -137,9 +137,9 @@ test('renders slider + diff column + decision + export when a row has diff + dif
   assert.ok(html.includes('approved') && html.includes('rejected') && html.includes('needs-work'),
     'decision select options present');
   // Suggested selector hint line.
-  assert.ok(html.includes("[data-nitpick='save-button']")
-    || html.includes('[data-nitpick=&#39;save-button&#39;]')
-    || html.includes('[data-nitpick=&apos;save-button&apos;]'),
+  assert.ok(html.includes("[data-crimson-gnome='save-button']")
+    || html.includes('[data-crimson-gnome=&#39;save-button&#39;]')
+    || html.includes('[data-crimson-gnome=&apos;save-button&apos;]'),
     'suggested selector rendered (escaped or raw)');
   // Export-to-JSON affordance (English label + the control id).
   assert.ok(html.includes('exportJson') && /export json/i.test(html), 'JSON export control present');

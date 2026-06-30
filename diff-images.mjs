@@ -9,10 +9,10 @@
  *
  * Env:
  *   PIXELMATCH_THRESHOLD=0.1   per-pixel colour-distance tolerance (0..1; higher = more permissive)
- *   NITPICK_PASS_PCT=0.02      % of changed pixels at/below which the row auto-passes
+ *   CRIMSON_GNOME_PASS_PCT=0.02      % of changed pixels at/below which the row auto-passes
  *
  * The ONE allowed dependency island in this package: pixelmatch + pngjs.
- * Everything else in nitpicker stays dependency-free (Node global WebSocket + fetch).
+ * Everything else in the-crimson-gnome stays dependency-free (Node global WebSocket + fetch).
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
@@ -28,7 +28,7 @@ if (!beforePath || !afterPath || !diffPath) {
 // (% changed pixels). Both env-overridable so a caller can tighten/loosen without
 // editing the file — verify-ui.mjs spawns this per row with the same env.
 const threshold = +(process.env.PIXELMATCH_THRESHOLD || 0.1);
-const passPct = +(process.env.NITPICK_PASS_PCT || 0.02);
+const passPct = +(process.env.CRIMSON_GNOME_PASS_PCT || 0.02);
 
 const before0 = PNG.sync.read(readFileSync(beforePath));
 const after0 = PNG.sync.read(readFileSync(afterPath));

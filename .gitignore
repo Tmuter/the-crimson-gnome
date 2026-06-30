@@ -1,5 +1,5 @@
-# nitpicker working dir (manifests, screenshots, generated reports — local only)
-.nitpick/
+# the-crimson-gnome working dir (manifests, screenshots, generated reports — local only)
+.crimson-gnome/
 
 # deps
 node_modules/

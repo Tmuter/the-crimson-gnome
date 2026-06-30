@@ -170,9 +170,9 @@ function stablePrelude({ theme, themeKeys, seed = {}, hide = '', hideDevOverlays
     ${hide}
   \`;
   const add = () => {
-    if (document.getElementById('__nitpick_freeze')) return;
+    if (document.getElementById('__crimson_gnome_freeze')) return;
     const s = document.createElement('style');
-    s.id = '__nitpick_freeze';
+    s.id = '__crimson_gnome_freeze';
     s.textContent = css;
     document.documentElement.appendChild(s);
   };

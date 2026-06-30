@@ -1,6 +1,6 @@
-# Contributing to nitpicker
+# Contributing to The Crimson Gnome
 
-Thanks for helping! nitpicker is deliberately small. A few constraints keep it that way.
+Thanks for helping! The Crimson Gnome is deliberately small. A few constraints keep it that way.
 
 ## The one rule: stay (almost) dependency-free
 

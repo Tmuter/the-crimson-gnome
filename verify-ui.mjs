@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * One-command orchestrator for the nitpicker before/after workflow. Turns a
+ * One-command orchestrator for the the-crimson-gnome before/after workflow. Turns a
  * manifest into a finished, reviewable HTML report so a human/agent can't forget
  * a step (capture → diff → report) or eyeball stale screenshots. Pipeline:
  *
@@ -18,7 +18,7 @@
  *
  *   node verify-ui.mjs <manifest.json> [out.html]
  *     env CDP_PORT(=9333) CDP_CONCURRENCY(=4) DIFF_CONCURRENCY(=4)
- *         PIXELMATCH_THRESHOLD NITPICK_PASS_PCT (forwarded to diff-images.mjs)
+ *         PIXELMATCH_THRESHOLD CRIMSON_GNOME_PASS_PCT (forwarded to diff-images.mjs)
  *
  * Sub-steps run as child processes (execFileSync) so each script keeps its own
  * argv/env contract. A capture failure is NON-FATAL: missing shots render as

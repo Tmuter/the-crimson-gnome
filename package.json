@@ -1,10 +1,10 @@
 {
-  "name": "nitpicker",
+  "name": "the-crimson-gnome",
   "version": "0.1.0",
   "description": "Before/after screenshot diffing for humans — capture two states of a page, pixel-diff them, and get a self-contained HTML report you walk to sign off each change.",
   "type": "module",
   "bin": {
-    "nitpick": "verify-ui.mjs"
+    "crimson-gnome": "verify-ui.mjs"
   },
   "scripts": {
     "test": "node --test \"test/*.test.mjs\""
@@ -38,10 +38,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tmuter/nitpicker.git"
+    "url": "git+https://github.com/Tmuter/the-crimson-gnome.git"
   },
-  "homepage": "https://github.com/Tmuter/nitpicker#readme",
+  "homepage": "https://github.com/Tmuter/the-crimson-gnome#readme",
   "bugs": {
-    "url": "https://github.com/Tmuter/nitpicker/issues"
+    "url": "https://github.com/Tmuter/the-crimson-gnome/issues"
   }
 }

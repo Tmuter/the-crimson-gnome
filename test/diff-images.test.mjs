@@ -36,7 +36,7 @@ function runDiff(before, after, diff) {
 }
 
 test('identical images auto-pass (changedPixels 0, pass true, diff written)', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'nitpick-diff-'));
+  const dir = mkdtempSync(join(tmpdir(), 'crimson-gnome-diff-'));
   // Same content twice → zero changed pixels → must auto-pass.
   const before = writePng(dir, 'before.png', 24, 16, [120, 80, 200]);
   const after = writePng(dir, 'after.png', 24, 16, [120, 80, 200]);
@@ -58,7 +58,7 @@ test('identical images auto-pass (changedPixels 0, pass true, diff written)', ()
 });
 
 test('different-size inputs are padded and do not crash', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'nitpick-diff-'));
+  const dir = mkdtempSync(join(tmpdir(), 'crimson-gnome-diff-'));
   // Mismatched dimensions are the historical crash case: diff-images must pad to
   // max(w,h) via PNG.bitblt instead of throwing on a buffer-length mismatch.
   const before = writePng(dir, 'before.png', 20, 10, [255, 255, 255]);

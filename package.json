@@ -1,0 +1,47 @@
+{
+  "name": "nitpicker",
+  "version": "0.1.0",
+  "description": "Before/after screenshot diffing for humans — capture two states of a page, pixel-diff them, and get a self-contained HTML report you walk to sign off each change.",
+  "type": "module",
+  "bin": {
+    "nitpick": "verify-ui.mjs"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=22.4.0"
+  },
+  "dependencies": {
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0"
+  },
+  "files": [
+    "*.mjs",
+    "cdp-launch.sh",
+    "SKILL.md",
+    "examples/"
+  ],
+  "keywords": [
+    "screenshot",
+    "visual-diff",
+    "visual-regression",
+    "before-after",
+    "pixelmatch",
+    "cdp",
+    "chrome-devtools-protocol",
+    "ui-review",
+    "claude-code",
+    "agent-skill"
+  ],
+  "author": "Tomasz Muter (https://github.com/Tmuter)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tmuter/nitpicker.git"
+  },
+  "homepage": "https://github.com/Tmuter/nitpicker#readme",
+  "bugs": {
+    "url": "https://github.com/Tmuter/nitpicker/issues"
+  }
+}

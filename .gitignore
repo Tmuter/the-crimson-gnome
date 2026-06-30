@@ -1,0 +1,8 @@
+# nitpicker working dir (manifests, screenshots, generated reports — local only)
+.nitpick/
+
+# deps
+node_modules/
+
+# os / editor
+.DS_Store

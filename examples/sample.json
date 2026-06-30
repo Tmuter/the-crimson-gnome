@@ -1,0 +1,42 @@
+{
+  "title": "nitpicker demo — settings review",
+  "id": "nitpicker-demo",
+  "lang": "en",
+  "capture": {
+    "w": 260,
+    "h": 150,
+    "scale": 1
+  },
+  "rows": [
+    {
+      "id": "a1",
+      "title": "Primary button restyled (teal → rose)",
+      "where": "/settings → Profile",
+      "before": "before.png",
+      "after": "after.png",
+      "diff": "a1-diff.png",
+      "diffStats": {
+        "changedPixels": 2496,
+        "totalPixels": 39000,
+        "pct": 6.4,
+        "pass": false,
+        "width": 260,
+        "height": 150,
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 260,
+          "height": 150
+        }
+      },
+      "note": "generated demo fixture — no dev server or login needed"
+    },
+    {
+      "id": "a2",
+      "title": "Footer (unchanged — auto-pass demo)",
+      "where": "/settings → footer",
+      "before": "before.png",
+      "after": "before.png"
+    }
+  ]
+}

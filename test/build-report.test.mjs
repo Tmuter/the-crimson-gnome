@@ -87,16 +87,16 @@ test('manifest.strings overrides any UI string (locale hook), and lang is honore
   const html = buildReport({
     title: 'Override',
     id: 'ov-1',
-    lang: 'pl',
-    strings: { checked: 'Sprawdziłem', exportJson: 'Eksport JSON', copied: 'Skopiowano ✓' },
+    lang: 'de',
+    strings: { checked: 'Geprüft', exportJson: 'JSON exportieren', copied: 'Kopiert ✓' },
     rows: [{ id: 'r1', title: 'A' }],
   });
-  assert.match(html, /<html lang="pl"/, 'lang honored');
-  assert.ok(html.includes('Sprawdziłem'), 'overridden checkbox label rendered');
-  assert.ok(html.includes('Eksport JSON'), 'overridden toolbar label rendered');
+  assert.match(html, /<html lang="de"/, 'lang honored');
+  assert.ok(html.includes('Geprüft'), 'overridden checkbox label rendered');
+  assert.ok(html.includes('JSON exportieren'), 'overridden toolbar label rendered');
   // The script-side string is injected via JSON.stringify, so a non-ASCII / spaced
   // value survives intact (this is the G2 safe-injection guarantee).
-  assert.ok(html.includes('Skopiowano ✓'), 'overridden script-side string injected safely');
+  assert.ok(html.includes('Kopiert ✓'), 'overridden script-side string injected safely');
 });
 
 test('renders slider + diff column + decision + export when a row has diff + diffStats', () => {
